@@ -35,6 +35,7 @@ namespace HubBy
             services.Configure<HubbyDatabaseSettings>(Configuration.GetSection(nameof(HubbyDatabaseSettings)));
             services.AddSingleton<IHubbyDatabaseSettings>(sp => sp.GetRequiredService<IOptions<HubbyDatabaseSettings>>().Value);
             services.AddSingleton<ProjectService>();
+            services.AddSingleton<ActivityService>();
             services.AddControllers();
             services.AddRazorPages();
             services.AddServerSideBlazor();
