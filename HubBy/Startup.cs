@@ -37,6 +37,7 @@ namespace HubBy
             services.AddSingleton<ProjectService>();
             services.AddSingleton<ActivityService>();
             services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
             services.AddRazorPages();
             services.AddServerSideBlazor();
         }
