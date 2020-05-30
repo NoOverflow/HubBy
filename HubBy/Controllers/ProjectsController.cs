@@ -10,7 +10,7 @@ namespace HubBy.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProjectsController : ControllerBase
+    public class ProjectsController : Controller
     {
         private readonly ProjectService _projectService;
 
@@ -22,5 +22,17 @@ namespace HubBy.Controllers
         [HttpGet]
         public ActionResult<List<Project>> Get() =>
             _projectService.Get();
+
+        [HttpPost]
+        public IActionResult PostJson(IEnumerable<string> values)
+        {
+            return (Json(new ControllerResponse("Ok")));
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteForm(IEnumerable<string> value)
+        {
+            return (Json(new ControllerResponse("Ok")));
+        }
     }
 }
