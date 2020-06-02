@@ -8,9 +8,14 @@ a, .btn-link {
     color: #0366d6;
 }
 
+#epitech-logo {
+    width: 150px;
+    height: 150px;
+}
+
 .btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
+    color: #000;
+    background-color: #fff;
     border-color: #1861ac;
 }
 
@@ -31,7 +36,7 @@ app {
 }
 
     .main .top-row {
-        background-color: #f7f7f7;
+        background-color: #fff;
         border-bottom: 1px solid #d6d5d5;
         justify-content: flex-end;
     }
