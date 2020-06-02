@@ -36,7 +36,10 @@ namespace HubBy.Services
         public void Remove(Activity activityIn) =>
             _activities.DeleteOne(activity => activity.Id == activityIn.Id);
 
-        public void Remove(string id) =>
+        public DeleteResult Remove(string id) =>
             _activities.DeleteOne(activity => activity.Id == id);
+
+        public DeleteResult RemoveName(string name) =>
+             _activities.DeleteOne(activity => activity.Name == name);
     }
 }
