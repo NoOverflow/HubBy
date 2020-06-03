@@ -24,6 +24,8 @@ namespace HubBy.Services
 
         public Activity Get(string id) => _activities.Find(x => x.Id == id).Single();
 
+        public Task<IAsyncCursor<Activity>> GetAsync() => _activities.FindAsync(x => true);
+
         public Activity Create(Activity project)
         {
             _activities.InsertOne(project);

@@ -1,0 +1,48 @@
+﻿@page "/activities"
+
+@using MongoDB.Driver;
+@using System.Collections.Generic;
+@using System.Linq;
+@using System.Threading.Tasks;
+@using HubBy.Services
+@inject ActivityService _ActivityService
+
+<h1>Activities</h1>
+
+@if (activities == null)
+{
+    <p><em>Loading all of those funky activities ...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>URL</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var activity in activities)
+            {
+                <tr>
+                    <td>@activity.Name</td>
+                    <td>@activity.Description</td>
+                    <td><a>@activity.Target</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<HubBy.Database.Models.Activity> activities;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var asyncCursor = await this._ActivityService.GetAsync();
+
+        activities = asyncCursor.ToList();
+    }
+}
