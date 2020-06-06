@@ -21,8 +21,13 @@ namespace HubBy.Services
         }
 
         public List<Project> Get() => _projects.Find(x => true).ToList();
-        
-        public Project Get(string id) => _projects.Find(x => x.Id == id).Single();
+
+        public Project Get(string id)
+        {
+            bool isValidId = id.ToCharArray().Any(c => "0123456789abcdefABCDEF".Contains(c)) && id.Length == 24;
+
+            return (isValidId ? _projects.Find(x => x.Id == id).Single() : null);
+        } 
 
         public Task<IAsyncCursor<Project>> GetAsync() => _projects.FindAsync(x => true);
 
