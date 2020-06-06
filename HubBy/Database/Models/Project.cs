@@ -34,9 +34,9 @@ namespace HubBy.Database.Models
         public string Description { get; set; }
 
         [BsonElement("Members")]
-        public int[] Members;
+        public int[] Members { get; set; }
 
-        [BsonElement("URL")]
-        public string URL;
+        [BsonElement("ImageURL")]
+        public string ImageURL { get; set; }
     }
 }

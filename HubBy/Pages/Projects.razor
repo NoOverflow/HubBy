@@ -7,7 +7,7 @@
 @using HubBy.Services
 @inject ProjectService _ProjectService
 
-<h1>Projects</h1>
+<h1>Projets</h1>
 
 @if (projects == null)
 {
@@ -15,25 +15,16 @@
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>URL</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var project in projects)
-            {
-                <tr>
-                    <td>@project.Name</td>
-                    <td>@project.Description</td>
-                    <td><a>@project.URL</a></td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <ul class="projects">
+        @foreach (var project in projects)
+        {
+            <li class="project">
+                <img class="project-image" src="@project.ImageURL"/>
+                <a href="/@project.Id">@project.Name</a>
+                <p>@project.Description</p>
+            </li>
+        }
+    </ul>
 }
 
 @code {
