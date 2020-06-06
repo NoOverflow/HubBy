@@ -12,9 +12,11 @@
 .
 .index-background {
     filter: blur(5px);
-
 }
 
+.text-center {
+    text-align: center;
+}
 
 .text-center {
     width: 100%;
