@@ -1,0 +1,27 @@
+﻿@page "/projects/{projectid}"
+@using HubBy.Services
+@inject ProjectService _ProjectService
+
+<h3>@ProjectID</h3>
+
+@if (HubProject == null)
+{
+    <h1>This project doesn't exist, what are you even doing here ?</h1>
+} 
+else
+{
+    <h1>@HubProject.Name</h1>
+}
+
+@code {
+    [Parameter]
+    public string ProjectID { get; set; }
+
+    public Database.Models.Project HubProject { get; set; }
+
+    protected override void OnInitialized()
+    {
+        this.ProjectID = ProjectID ?? "Unknown";
+        this.HubProject = _ProjectService.Get(this.ProjectID);
+    }
+}
