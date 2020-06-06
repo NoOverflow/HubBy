@@ -5,6 +5,17 @@
     src: url("../ressources/vice.otf");
 }
 
+
+/*
+    Index
+*/
+.
+.index-background {
+    filter: blur(5px);
+
+}
+
+
 .text-center {
     width: 100%;
 }
