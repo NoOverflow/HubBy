@@ -27,9 +27,7 @@ else
             @foreach (var activity in activities)
             {
                 <tr>
-                    <td>@activity.Name</td>
-                    <td>@activity.Description</td>
-                    <td><a>@activity.Target</a></td>
+                    <td><a href="/@activity.Codeacti">@activity.ActiTitle</a></td>
                 </tr>
             }
         </tbody>
@@ -37,12 +35,10 @@ else
 }
 
 @code {
-    private List<HubBy.Database.Models.Activity> activities;
+    private List<HubBy.Services.ApiModels.Activity> activities;
 
     protected override async Task OnInitializedAsync()
     {
-        var asyncCursor = await this._ActivityService.GetAsync();
-
-        activities = asyncCursor.ToList();
+        activities = _ActivityService.Get();
     }
 }
