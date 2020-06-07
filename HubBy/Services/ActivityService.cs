@@ -23,6 +23,8 @@ namespace HubBy.Services
 
         public List<Activity> Get() => BackgroundQuery.GetHubActivities();
 
+        public Activity Get(string actId) => BackgroundQuery.GetHubActivities().Find(x => x.Codeacti == actId);
+
         public Task<IAsyncCursor<Activity>> GetAsync() => _activities.FindAsync(x => true);
 
         public Activity Create(Activity project)
