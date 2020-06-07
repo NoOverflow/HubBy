@@ -65,6 +65,8 @@ namespace HubBy
                 app.UseHsts();
             }
 
+            BackgroundQuery.QueryActivityAPI();
+            BackgroundQuery.InitAPIBackgroundQuery();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();

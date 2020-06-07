@@ -1,5 +1,6 @@
 ﻿using HubBy.Database.Models;
 using HubBy.Services;
+using HubBy.Services.ApiModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson.IO;
@@ -30,22 +31,6 @@ namespace HubBy.Controllers
         {
             _activityService.Create(activity);
             return (Json(new ControllerResponse("Ok")));
-        }
-
-        [HttpDelete]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult DeleteForm([FromForm] Dictionary<string, string> value)
-        {
-            string _id = null;
-            string _name = null;
-            DeleteResult result;
-
-            if (!value.ContainsKey("Id") && !value.ContainsKey("Name"))
-                return (BadRequest());
-            value.TryGetValue("Id", out _id);
-            value.TryGetValue("Name", out _name);
-            result = (_id != null) ? _activityService.Remove(_id) : _activityService.RemoveName(_name);
-            return (Json(new ControllerResponse(String.Format("Deleted {0} entries", result.DeletedCount)))); 
         }
     }
 }
