@@ -30,7 +30,10 @@ namespace HubBy.Services
                 {
                     request.Cookies = new CookieStorage();
                     request.UseCookies = true;
-                    request.Get(Environment.GetEnvironmentVariable("AutoLoginEpitech", EnvironmentVariableTarget.User) + "/user/?format=json").ToString();
+                    string autologin = Environment.GetEnvironmentVariable("AutoLoginEpitech", EnvironmentVariableTarget.User);
+                    if (String.IsNullOrEmpty(autologin))
+                        autologin = Environment.GetEnvironmentVariable("AutoLoginEpitech", EnvironmentVariableTarget.Process);
+                    request.Get(autologin + "/user/?format=json").ToString();
 #if DEBUG
                     answer = request.Get(String.Format(ACTIVITY_URL, "2020-05-01")).ToString();
 #else
