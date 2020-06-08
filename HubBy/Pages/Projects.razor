@@ -1,0 +1,39 @@
+﻿@page "/projects"
+
+@using MongoDB.Driver;
+@using System.Collections.Generic;
+@using System.Linq;
+@using System.Threading.Tasks;
+@using HubBy.Services
+@inject ProjectService _ProjectService
+
+<h1>Projets</h1>
+
+@if (projects == null)
+{
+    <p><em>Loading all of those funky projects ...</em></p>
+}
+else
+{
+    <ul class="projects">
+        @foreach (var project in projects)
+        {
+            <li class="project">
+                <img class="project-image" src="@project.ImageURL"/>
+                <a href="/projects/@project.Id">@project.Name</a>
+                <p>@project.Description</p>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private List<HubBy.Database.Models.Project> projects;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var asyncCursor = await this._ProjectService.GetAsync();
+
+        projects = asyncCursor.ToList();
+    }
+}

@@ -1,0 +1,30 @@
+﻿@page "/activities/{activityid}"
+@using HubBy.Services
+@inject ActivityService _ActivityService
+
+<h3>Activity</h3>
+
+@if (HubActivity == null)
+{
+    <h1>This activity doesn't exist, what are you even doing here ?</h1>
+}
+else
+{
+    <h1>@HubActivity.ActiTitle</h1>
+    <p>Start  : @HubActivity.Start<br/></p>
+    <p>End    : @HubActivity.End<br/></p>
+    <p>Module : @HubActivity.Titlemodule</p>
+}
+
+@code {
+    [Parameter]
+    public string ActivityID { get; set; }
+
+    public Services.ApiModels.Activity HubActivity { get; set; }
+
+    protected override void OnInitialized()
+    {
+        this.ActivityID = ActivityID ?? "Unknown";
+        this.HubActivity = _ActivityService.Get(this.ActivityID);
+    }
+}
