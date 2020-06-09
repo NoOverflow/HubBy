@@ -20,6 +20,7 @@ using HubBy.Middlewares;
 using Microsoft.AspNetCore.Routing;
 using Toolbelt.Extensions.DependencyInjection;
 using Westwind.AspNetCore.LiveReload;
+using Microsoft.JSInterop;
 
 namespace HubBy
 {

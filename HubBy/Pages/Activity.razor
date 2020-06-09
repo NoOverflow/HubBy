@@ -1,6 +1,7 @@
 ﻿@page "/activities/{activityid}"
 @using HubBy.Services
 @inject ActivityService _ActivityService
+@inject IJSRuntime _Rtime
 
 <h3>Activity</h3>
 
@@ -11,9 +12,10 @@
 else
 {
     <h1>@HubActivity.ActiTitle</h1>
-    <p>Start  : @HubActivity.Start<br/></p>
-    <p>End    : @HubActivity.End<br/></p>
+    <p>Start  : @HubActivity.Start<br /></p>
+    <p>End    : @HubActivity.End<br /></p>
     <p>Module : @HubActivity.Titlemodule</p>
+    <button class="btn btn-primary" @onclick=OnAddCalendarClick>Add a google calendars reminder</button>
 }
 
 @code {
@@ -26,5 +28,10 @@ else
     {
         this.ActivityID = ActivityID ?? "Unknown";
         this.HubActivity = _ActivityService.Get(this.ActivityID);
+    }
+
+    public void OnAddCalendarClick()
+    {
+        _Rtime.InvokeAsync<object>("open", "https://www.google.com");
     }
 }
