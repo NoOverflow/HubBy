@@ -29,7 +29,10 @@ namespace HubBy.Controllers
         [HttpPost]
         public IActionResult PostJson([FromBody] Activity activity)
         {
-            _activityService.Create(activity);
+            var result = _activityService.Create(activity);
+
+            if (result == null)
+                return (Json(new ControllerResponse("An error occured")));
             return (Json(new ControllerResponse("Ok")));
         }
     }

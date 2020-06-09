@@ -7,8 +7,6 @@
 @using HubBy.Services
 @inject ActivityService _ActivityService
 
-<h1>Activities</h1>
-
 @if (activities == null)
 {
     <p><em>Loading all of those funky activities ...</em></p>
@@ -18,9 +16,7 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>URL</th>
+                <th>Activities</th>
             </tr>
         </thead>
         <tbody>

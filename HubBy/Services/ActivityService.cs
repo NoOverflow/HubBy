@@ -21,16 +21,33 @@ namespace HubBy.Services
             _activities = database.GetCollection<Activity>(settings.ActivitiesCollectionName);
         }
 
-        public List<Activity> Get() => BackgroundQuery.GetHubActivities();
+        public List<Activity> Get()
+        {
+            var holder = BackgroundQuery.GetHubActivities();
 
-        public Activity Get(string actId) => BackgroundQuery.GetHubActivities().Find(x => x.Codeacti == actId);
+            holder.AddRange(GetOwn());
+            return (holder);
+        }
 
-        public Task<IAsyncCursor<Activity>> GetAsync() => _activities.FindAsync(x => true);
+        public List<Activity> GetOwn() => _activities.Find(x => true).ToList();
+
+        public Activity GetOwn(string id) => _activities.Find(x => x.Codeacti == id).Single();
+
+        public Activity Get(string actId) 
+        {
+            var entry = BackgroundQuery.GetHubActivities().Find(x => x.Codeacti == actId);
+
+            if (entry == null)
+                entry = GetOwn(actId);
+            return (entry);
+        }
 
         public Activity Create(Activity project)
         {
+            if (_activities.Find(x => x.ActiTitle == project.ActiTitle || project.Codeacti == x.Codeacti).CountDocuments() != 0)
+                return (null);
             _activities.InsertOne(project);
-            return project;
+            return (project);
         }
     }
 }
