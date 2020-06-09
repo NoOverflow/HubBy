@@ -42,6 +42,15 @@ namespace HubBy.Services
             return (entry);
         }
 
+        public bool Delete(string codeActi)
+        {
+            var res = _activities.DeleteOne(x => x.Codeacti == codeActi);
+
+            if (!res.IsAcknowledged || res.DeletedCount == 0)
+                return (false);
+            return (true);
+        }
+
         public Activity Create(Activity project)
         {
             if (_activities.Find(x => x.ActiTitle == project.ActiTitle || project.Codeacti == x.Codeacti).CountDocuments() != 0)

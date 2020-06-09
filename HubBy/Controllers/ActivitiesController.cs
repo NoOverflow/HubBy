@@ -35,5 +35,33 @@ namespace HubBy.Controllers
                 return (Json(new ControllerResponse("An error occured")));
             return (Json(new ControllerResponse("Ok")));
         }
+
+        /// <summary>
+        /// This endpoint is only made to delete internal activities, and not EPITECHs activities
+        /// </summary>
+        /// <returns></returns>
+        [HttpDelete]
+        public IActionResult Delete([FromBody] dynamic options)
+        {
+            try
+            {
+                if (String.IsNullOrEmpty(options.Codeacti.Value))
+                    return (Json(new ControllerResponse("No Codeacti provided")));
+                if (_activityService.Delete(options.Codeacti.Value))
+                {
+                    return (Json(new ControllerResponse("Ok")));
+                } 
+                else
+                {
+                    return (Json(new ControllerResponse("Couldn't delete entry, no matching actId ?")));
+                }
+                
+            }
+            catch (Exception)
+            {
+                return (Json(new ControllerResponse("A backend error occured, please contact the administrators.")));
+            }
+            
+        }
     }
 }
