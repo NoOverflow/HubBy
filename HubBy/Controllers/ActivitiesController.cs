@@ -53,7 +53,7 @@ namespace HubBy.Controllers
                 } 
                 else
                 {
-                    return (Json(new ControllerResponse("Couldn't delete entry, no matching actId ?")));
+                   return (Json(new ControllerResponse("Couldn't delete entry, no matching actId ?")));
                 }
                 
             }
@@ -61,7 +61,6 @@ namespace HubBy.Controllers
             {
                 return (Json(new ControllerResponse("A backend error occured, please contact the administrators.")));
             }
-            
         }
     }
 }
