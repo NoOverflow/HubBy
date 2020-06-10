@@ -24,8 +24,12 @@ namespace HubBy.Controllers
             _projectService.Get();
 
         [HttpPost]
-        public IActionResult PostJson(IEnumerable<string> values)
+        public IActionResult PostJson([FromBody] Project project)
         {
+            var result = _projectService.Create(project);
+
+            if (result == null)
+                return (Json(new ControllerResponse("An error occured")));
             return (Json(new ControllerResponse("Ok")));
         }
 

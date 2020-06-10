@@ -12,7 +12,7 @@ namespace HubBy.Database.Models
         Free,
         Wip,
         Recruiting,
-        Over
+        Done
     }
 
     public class Project

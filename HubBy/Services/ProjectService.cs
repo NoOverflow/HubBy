@@ -35,8 +35,10 @@ namespace HubBy.Services
 
         public Project Create(Project project)
         {
+            if (_projects.Find(x => project.Name == x.Name).CountDocuments() != 0)
+                return (null);
             _projects.InsertOne(project);
-            return project;
+            return (project);
         }
 
         public void Update(string id, Project projectIn) =>
