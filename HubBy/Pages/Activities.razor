@@ -5,12 +5,16 @@
 @using System.Linq;
 @using System.Threading.Tasks;
 @using HubBy.Services
+@using Microsoft.AspNetCore.Razor;
+@using Microsoft.AspNetCore.WebUtilities; 
+@inject NavigationManager _NavigationManager
 @inject ActivityService _ActivityService
+@inject IJSRuntime _Rtime
 
 <div class="main-container">
     <div class="search">
-        <input class="search-bar" type="text" placeholder="Rechercher des activités..." />
-        <button class="search-button">RECHERCHER</button>
+        <input @bind="SearchBoxValue" class="search-bar" type="text" placeholder="Rechercher des activités..." />
+        <button @onclick="OnSearchClick" class="search-button">RECHERCHER</button>
     </div>
     <div class="search-settings"></div>
     @if (activities == null)
@@ -37,21 +41,41 @@
     private List<HubBy.Services.ApiModels.Activity> activities;
 
     public Dictionary<string, string> ActivityColors = new Dictionary<string, string>()
-    {
+{
         {"Workshop", "#9D70FF" },
         {"Talk", "#52D90B" },
         {"Experimentation", "#FF7070"}
     };
 
     public Dictionary<string, string> ActivityClasses = new Dictionary<string, string>()
-    {
+{
         {"Workshop", "activity-workshop" },
         {"Talk", "activity-talk" },
         {"Experimentation", "activity-exp"}
     };
 
+    private string SearchBoxValue { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-        activities = _ActivityService.Get();
+        Microsoft.Extensions.Primitives.StringValues searchArgs = Microsoft.Extensions.Primitives.StringValues.Empty;
+        string searchName = String.Empty;
+
+        if (QueryHelpers.ParseQuery(_NavigationManager.ToAbsoluteUri(_NavigationManager.Uri).Query).TryGetValue("search", out searchArgs))
+        {
+            searchName = searchArgs.Count > 0 ? searchArgs[0] : String.Empty;
+        }
+        if (searchName != String.Empty)
+        {
+            SearchBoxValue = searchName;
+            activities = _ActivityService.Search(searchName);
+        }
+        else
+            activities = _ActivityService.Get();
+    }
+
+    public void OnSearchClick()
+    {
+        _NavigationManager.NavigateTo(_NavigationManager.BaseUri + "activities?search=" + System.Web.HttpUtility.UrlEncode(SearchBoxValue), true);
     }
 }

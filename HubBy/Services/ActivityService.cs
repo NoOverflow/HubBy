@@ -29,6 +29,13 @@ namespace HubBy.Services
             return (holder);
         }
 
+        public List<Activity> Search(string search) =>
+            _activities.Find(x => x.ActiTitle.ToLower().Contains(search.ToLower()))
+            .ToList()
+            .Concat(
+                BackgroundQuery.GetHubActivities().FindAll(x => x.ActiTitle.ToLower().Contains(search.ToLower()))
+             ).ToList();
+
         public List<Activity> GetOwn() => _activities.Find(x => true).ToList();
 
         public Activity GetOwn(string id) => _activities.Find(x => x.Codeacti == id).Single();
