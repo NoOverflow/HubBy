@@ -31,6 +31,8 @@ namespace HubBy.Services
 
         public Task<IAsyncCursor<Project>> GetAsync() => _projects.FindAsync(x => true);
 
+        public Task<IAsyncCursor<Project>> SearchAsync(string search) => _projects.FindAsync(x => x.Name.ToLower().Contains(search.ToLower()));
+
         public Project Create(Project project)
         {
             _projects.InsertOne(project);

@@ -27,9 +27,9 @@
             @foreach (var activity in activities)
             {
                 <li class="activity-card">
-                    <div class="activity-pastille" style="background-color:@ActivityColors.GetValueOrDefault(activity.TypeTitle, "Talk")">@activity.TypeTitle[0]</div>
+                    <div class="activity-pastille" style="background-color:@ActivityColors.GetValueOrDefault(activity.TypeTitle, "#9D70FF")">@activity.TypeTitle[0]</div>
                     <h3>@activity.ActiTitle</h3>
-                    <div class="activity-smolpastille @ActivityClasses.GetValueOrDefault(activity.TypeTitle, "Talk")">@activity.TypeTitle.ToUpper()</div>
+                    <div class="activity-smolpastille @ActivityClasses.GetValueOrDefault(activity.TypeTitle, "activity-talk")">@activity.TypeTitle.ToUpper()</div>
                     <p class="activity-description">Débute à : @(activity.Start.Value.DateTime.ToString("dd/MM - HH:mm"))</p>
                 </li>
             }
@@ -41,14 +41,14 @@
     private List<HubBy.Services.ApiModels.Activity> activities;
 
     public Dictionary<string, string> ActivityColors = new Dictionary<string, string>()
-{
+    {
         {"Workshop", "#9D70FF" },
         {"Talk", "#52D90B" },
         {"Experimentation", "#FF7070"}
     };
 
     public Dictionary<string, string> ActivityClasses = new Dictionary<string, string>()
-{
+    {
         {"Workshop", "activity-workshop" },
         {"Talk", "activity-talk" },
         {"Experimentation", "activity-exp"}
