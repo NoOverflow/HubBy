@@ -1,15 +1,6 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
-@font-face {
-    font-family: vice;
-    src: url("../ressources/vice.otf");
-}
-
-
-/*
-    Index
-*/
-.
+/* Index */
 .index-background {
     filter: blur(5px);
 }
@@ -40,7 +31,7 @@
 html,
 body {
     width: 100%;
-    font-family: vice;
+    font-family: Bahnschrift;
 }
 
 a, .btn-link {
@@ -93,6 +84,7 @@ app {
     padding-top: 1.1rem;
     display: list-item;
     width: 100%;
+    list-style: none;
 }
 
 .navbar-toggler {
@@ -177,12 +169,6 @@ app {
     }
 }
 
-/*
-** Globals
-*/
-
-
-
 /* Links */
 a,
 a:focus,
@@ -209,9 +195,7 @@ a:hover {
 
 body {
     color: #fff;
-    text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
-    box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
-    background-color: #afe2f5;
+    background-color: #D2E4F2;
 }
 
 /*
@@ -274,22 +258,273 @@ body {
     color: #000;
 }
 
-/* PROJECT */
-.projects {
-    display: inline-grid;
-    width: 100%;
+/* Common */
+.search {
+    display: inline-flex;
+    padding-left: 40px;
+}
+
+.search-button {
+    height: 48px;
+    width: 176px;
+    background-color: #0069B4;
+    color: white;
+    font-family: Bahnschrift;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+    box-shadow: 0px 0px 0px transparent;
+    border: 0px solid transparent;
+    text-shadow: 0px 0px 0px transparent;
+}
+
+.search-bar {
+    height: 48px;
+    width: 784px;
+    background-color: #EEE;
+    font-family: Bahnschrift;
+    font-size: 20px;
+    line-height: 24px;
+    box-shadow: 0px 0px 0px transparent;
+    border: 0px solid transparent;
+    text-shadow: 0px 0px 0px transparent;
+    padding-left: 16px;
+}
+
+    .search-bar::placeholder {
+        margin-left: 16px;
+        opacity: 0.25;
+        color: #000;
+        font-family: Bahnschrift;
+        font-size: 20px;
+    }
+
+.main-container {
+    display: inline-block;
+    text-align: center;
+}
+
+/* Projects */
+.project-card {
+    background-color: #fff;
+    height: 192px;
+    width: 960px;
+    padding: 32px 32px 32px 32px;
     list-style: none;
 }
 
-.project {
-    margin-bottom: 25px;
-    margin-top: 25px;
-    width: 100%;
+    .project-card > h3 {
+        text-align: left;
+        margin-bottom: 2px;
+        color: rgba(0,0,0,0.5);
+    }
+
+.project-submit {
+    display: block;
+    text-align: right;
+    background-color: white;
+    color: rgba(0,0,0,0.5);
+    font-family: Bahnschrift;
+    font-size: 12px;
+    line-height: 30px;
+    padding-right: 25px;
 }
 
-.project-image {
-    width: 400px;
-    box-shadow: 5px 5px 5px rgba(0.2, 0.2, 0.2,0.4);
-    border-radius: 15px;
+    .project-submit:hover {
+        color: black;
+    }
+
+.project-pastille {
+    border-radius: 100%;
+    height: 128px;
+    width: 128px;
     float: left;
+    margin-right: 32px;
+    text-align: center;
+    line-height: 128px;
+    color: white;
+    font-size: 58px;
+    object-fit: cover;
+}
+
+.project-smolpastille {
+    font-size: 12px;
+    line-height: 14px;
+    color: rgba(0,0,0,0.5);
+    height: 12px;
+    text-align: left;
+}
+
+    .project-smolpastille::before {
+        background-color: aqua;
+        border-radius: 100%;
+        width: 8px;
+        content: "";
+        display: inline-block;
+        height: 8px;
+        margin-right: 4px;
+    }
+
+    .project-done::before {
+        background-color: #FF8585;
+    }
+
+    .project-wip::before {
+        background-color: #FFC373;
+    }
+
+    .project-free::before {
+        background-color: #77D786;
+    }
+
+    .project-recruiting::before {
+        background-color: #FF9DDB;
+    }
+
+.project-description {
+    height: 48px;
+    width: 740px;
+    color: rgba(0,0,0,0.25);
+    font-family: Bahnschrift;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: justify;
+    margin-top: 10px;
+}
+
+
+/* Activities */
+.activity-card {
+    background-color: #fff;
+    height: 192px;
+    width: 960px;
+    padding: 32px 32px 32px 32px;
+    list-style: none;
+}
+
+    .activity-card > h3 {
+        text-align: left;
+        margin-bottom: 2px;
+        color: rgba(0,0,0,0.5);
+    }
+
+.activity-pastille {
+    border-radius: 100%;
+    height: 128px;
+    width: 128px;
+    float: left;
+    margin-right: 32px;
+    text-align: center;
+    line-height: 128px;
+    color: white;
+    font-size: 58px;
+}
+
+.activity-smolpastille {
+    font-size: 12px;
+    line-height: 14px;
+    color: rgba(0,0,0,0.5);
+    height: 12px;
+    text-align: left;
+}
+    .activity-smolpastille::before {
+        background-color: aqua;
+        border-radius: 100%;
+        width: 8px;
+        content: "";
+        display: inline-block;
+        height: 8px;
+        margin-right: 4px;
+    }
+
+    .activity-workshop::before {
+        background-color: #9D70FF
+    }
+
+    .activity-talk::before {
+        background-color: #52D90B;
+    }
+
+    .activity-exp::before {
+        background-color: #FF7070;
+    }
+
+.activity-description {
+    height: 48px;
+    width: 740px;
+    color: rgba(0,0,0,0.25);
+    font-family: Bahnschrift;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: justify;
+    margin-top: 10px;
+}
+
+/* Submit */
+.submit-input-area {
+    width: 896px;
+    display: inline-block;
+}
+
+    .submit-input-area > textarea {
+        width: 100%;
+        height: 144px;
+        margin-top: 16px;
+        font-family: Bahnschrift;
+        font-size: 16px;
+        line-height: normal;
+    }
+
+.submit-header {
+    display: flex;
+}
+
+.submit-input-style {
+    background-color: #EEE;
+    box-shadow: 0px 0px 0px transparent;
+    border: 0px solid transparent;
+    text-shadow: 0px 0px 0px transparent;
+}
+
+    .submit-input-style::placeholder {
+        color: #000;
+        font-family: Bahnschrift;
+        opacity: 0.25;
+        font-size: 16px;
+        line-height: normal;
+    }
+
+.submit-time-selector {
+    display: block ruby;
+    margin-bottom: 16px;
+    margin-top: 16px;
+    font-family: Bahnschrift;
+    font-size: 16px;
+    line-height: 19px;
+}
+.submit-project {
+    width: 160px;
+    height: 48px;
+    font-family: Bahnschrift;
+    font-size: 16px;
+    line-height: 19px;
+}
+
+.submit-title {
+    height: 48px;
+    font-family: Bahnschrift;
+    font-size: 16px;
+    line-height: 19px;
+    width: 100%;
+    margin-left: 16px;
+}
+
+.submit-button {
+    height: 48px;
+    width: 160px;
+    background-color: #0069B4;
+    font-family: Bahnschrift;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
 }

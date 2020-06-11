@@ -4,36 +4,86 @@
 @using System.Collections.Generic;
 @using System.Linq;
 @using System.Threading.Tasks;
-@using HubBy.Services
+@using HubBy.Services;
+@using Microsoft.AspNetCore.WebUtilities;
+
 @inject ProjectService _ProjectService
+@inject NavigationManager _NavigationManager
+@inject IJSRuntime _Rtime
 
-<h1>Projets</h1>
-
-@if (projects == null)
-{
-    <p><em>Loading all of those funky projects ...</em></p>
-}
-else
-{
-    <ul class="projects">
-        @foreach (var project in projects)
-        {
-            <li class="project">
-                <img class="project-image" src="@project.ImageURL"/>
-                <a href="/projects/@project.Id">@project.Name</a>
-                <p>@project.Description</p>
-            </li>
-        }
-    </ul>
-}
+<div class="main-container">
+    <div class="search">
+        <input @bind="SearchBoxValue" class="search-bar" type="text" placeholder="Rechercher des projets..." />
+        <button @onclick="OnSearchClick" class="search-button">RECHERCHER</button>
+    </div>
+    
+    <div class="search-settings"></div>
+    @if (projects == null)
+    {
+        <p><em>Loading all of those funky activities ...</em></p>
+    }
+    else
+    {
+        <ul class="project-list">
+            <a class="project-submit" href="/submit">SOUMETTRE UN PROJET</a>
+            @foreach (var project in projects)
+            {
+                <li class="project-card">
+                    <img class="project-pastille" src="@project.ImageURL" />
+                    <h3>@project.Name</h3>
+                    <div class="project-smolpastille @ProjectClasses.GetValueOrDefault(project.State, "project-wip")">@TranslationDict[project.State].ToUpper()</div>
+                    <p class="project-description">@project.Description</p>
+                </li>
+            }
+        </ul>
+    }
+</div>
 
 @code {
     private List<HubBy.Database.Models.Project> projects;
 
+    private string SearchBoxValue { get; set; }
+
+    public Dictionary<HubBy.Database.Models.ProjectState, string> TranslationDict = new Dictionary<HubBy.Database.Models.ProjectState, string>()
+    {
+        {HubBy.Database.Models.ProjectState.Wip, "En cours"},
+        {HubBy.Database.Models.ProjectState.Recruiting, "En recherche de candidatures"},
+        {HubBy.Database.Models.ProjectState.Free, "Libre"},
+        {HubBy.Database.Models.ProjectState.Done, "Fini" }
+    };
+
+    public Dictionary<HubBy.Database.Models.ProjectState, string> ProjectClasses = new Dictionary<HubBy.Database.Models.ProjectState, string>()
+    {
+        {HubBy.Database.Models.ProjectState.Done, "project-done" },
+        {HubBy.Database.Models.ProjectState.Wip, "project-wip" },
+        {HubBy.Database.Models.ProjectState.Free, "project-free"},
+        {HubBy.Database.Models.ProjectState.Recruiting, "project-recruiting"}
+    };
+
     protected override async Task OnInitializedAsync()
     {
-        var asyncCursor = await this._ProjectService.GetAsync();
+        Microsoft.Extensions.Primitives.StringValues searchArgs = Microsoft.Extensions.Primitives.StringValues.Empty;
+        string searchName = String.Empty;
 
-        projects = asyncCursor.ToList();
+        if (QueryHelpers.ParseQuery(_NavigationManager.ToAbsoluteUri(_NavigationManager.Uri).Query).TryGetValue("search", out searchArgs))
+        {
+            searchName = searchArgs.Count > 0 ? searchArgs[0] : String.Empty;
+        }
+        if (searchName != String.Empty)
+        {
+            var asyncCursor = await this._ProjectService.SearchAsync(searchName);
+            SearchBoxValue = searchName;
+            projects = asyncCursor.ToList();
+        }
+        else
+        {
+            var asyncCursor = await this._ProjectService.GetAsync();
+            projects = asyncCursor.ToList();
+        }
+    }
+
+    public void OnSearchClick()
+    {
+        _NavigationManager.NavigateTo(_NavigationManager.BaseUri + "projects?search=" + System.Web.HttpUtility.UrlEncode(SearchBoxValue), true);
     }
 }

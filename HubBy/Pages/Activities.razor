@@ -5,40 +5,86 @@
 @using System.Linq;
 @using System.Threading.Tasks;
 @using HubBy.Services
+@using Microsoft.AspNetCore.Razor;
+@using Microsoft.AspNetCore.WebUtilities; 
+@inject NavigationManager _NavigationManager
 @inject ActivityService _ActivityService
+@inject IJSRuntime _Rtime
 
-<h1>Activities</h1>
-
-@if (activities == null)
-{
-    <p><em>Loading all of those funky activities ...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>URL</th>
-            </tr>
-        </thead>
-        <tbody>
+<div class="main-container">
+    <div class="search">
+        <input @bind="SearchBoxValue" class="search-bar" type="text" placeholder="Rechercher des activités..." />
+        <button @onclick="OnSearchClick" class="search-button">RECHERCHER</button>
+    </div>
+    <div class="search-settings"></div>
+    @if (activities == null)
+    {
+        <p><em>Loading all of those funky activities ...</em></p>
+    }
+    else
+    {
+        <ul class="project-list">
+            <a class="project-submit" href="/submit">SOUMETTRE UNE ACTIVITÉ</a>
             @foreach (var activity in activities)
             {
-                <tr>
-                    <td><a href="/activities/@activity.Codeacti">@activity.ActiTitle</a></td>
-                </tr>
+                try
+                {
+                    <li class="activity-card">
+                        <div class="activity-pastille" style="background-color:@ActivityColors.GetValueOrDefault(activity.TypeTitle, "#9D70FF")">@activity.TypeTitle[0]</div>
+                        <h3>@activity.ActiTitle</h3>
+                        <div class="activity-smolpastille @ActivityClasses.GetValueOrDefault(activity.TypeTitle, "activity-talk")">@activity.TypeTitle.ToUpper()</div>
+                        <p class="activity-description">Débute à : @(activity.Start.Value.DateTime.ToString("dd/MM - HH:mm")) - Fini à : @(activity.End.Value.DateTime.ToString("dd/MM - HH:mm"))</p>
+                    </li>
+                }
+                catch (Exception)
+                {
+
+                }
+
             }
-        </tbody>
-    </table>
-}
+        </ul>
+    }
+</div>
 
 @code {
     private List<HubBy.Services.ApiModels.Activity> activities;
 
+    public Dictionary<string, string> ActivityColors = new Dictionary<string, string>()
+    {
+        {"Workshop", "#9D70FF" },
+        {"Talk", "#52D90B" },
+        {"Experimentation", "#FF7070"}
+    };
+
+    public Dictionary<string, string> ActivityClasses = new Dictionary<string, string>()
+    {
+        {"Workshop", "activity-workshop" },
+        {"Talk", "activity-talk" },
+        {"Experimentation", "activity-exp"}
+    };
+
+    private string SearchBoxValue { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-        activities = _ActivityService.Get();
+        Microsoft.Extensions.Primitives.StringValues searchArgs = Microsoft.Extensions.Primitives.StringValues.Empty;
+        string searchName = String.Empty;
+
+        if (QueryHelpers.ParseQuery(_NavigationManager.ToAbsoluteUri(_NavigationManager.Uri).Query).TryGetValue("search", out searchArgs))
+        {
+            searchName = searchArgs.Count > 0 ? searchArgs[0] : String.Empty;
+        }
+        if (searchName != String.Empty)
+        {
+            SearchBoxValue = searchName;
+            activities = _ActivityService.Search(searchName);
+        }
+        else
+            activities = _ActivityService.Get();
+    }
+
+    public void OnSearchClick()
+    {
+        _NavigationManager.NavigateTo(_NavigationManager.BaseUri + "activities?search=" + System.Web.HttpUtility.UrlEncode(SearchBoxValue), true);
     }
 }

@@ -21,16 +21,49 @@ namespace HubBy.Services
             _activities = database.GetCollection<Activity>(settings.ActivitiesCollectionName);
         }
 
-        public List<Activity> Get() => BackgroundQuery.GetHubActivities();
+        public List<Activity> Get()
+        {
+            var holder = BackgroundQuery.GetHubActivities();
 
-        public Activity Get(string actId) => BackgroundQuery.GetHubActivities().Find(x => x.Codeacti == actId);
+            holder.AddRange(GetOwn());
+            return (holder);
+        }
 
-        public Task<IAsyncCursor<Activity>> GetAsync() => _activities.FindAsync(x => true);
+        public List<Activity> Search(string search) =>
+            _activities.Find(x => x.ActiTitle.ToLower().Contains(search.ToLower()))
+            .ToList()
+            .Concat(
+                BackgroundQuery.GetHubActivities().FindAll(x => x.ActiTitle.ToLower().Contains(search.ToLower()))
+             ).ToList();
+
+        public List<Activity> GetOwn() => _activities.Find(x => true).ToList();
+
+        public Activity GetOwn(string id) => _activities.Find(x => x.Codeacti == id).Single();
+
+        public Activity Get(string actId) 
+        {
+            var entry = BackgroundQuery.GetHubActivities().Find(x => x.Codeacti == actId);
+
+            if (entry == null)
+                entry = GetOwn(actId);
+            return (entry);
+        }
+
+        public bool Delete(string codeActi)
+        {
+            var res = _activities.DeleteOne(x => x.Codeacti == codeActi);
+
+            if (!res.IsAcknowledged || res.DeletedCount == 0)
+                return (false);
+            return (true);
+        }
 
         public Activity Create(Activity project)
         {
+            if (_activities.Find(x => x.ActiTitle == project.ActiTitle || project.Codeacti == x.Codeacti).CountDocuments() != 0)
+                return (null);
             _activities.InsertOne(project);
-            return project;
+            return (project);
         }
     }
 }
