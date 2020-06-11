@@ -34,11 +34,7 @@ namespace HubBy.Services
                     if (String.IsNullOrEmpty(autologin))
                         autologin = Environment.GetEnvironmentVariable("AutoLoginEpitech", EnvironmentVariableTarget.Process);
                     request.Get(autologin + "/user/?format=json").ToString();
-#if DEBUG
                     answer = request.Get(String.Format(ACTIVITY_URL, "2020-05-01")).ToString();
-#else
-                    answer = request.Get(String.Format(ACTIVITY_URL, DateTime.Now.ToString("yyyy-MM-dd"))).ToString();
-#endif
                     lock (_Locker)
                         _Activities = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Activity>>(answer);
                 }
