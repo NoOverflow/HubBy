@@ -8,6 +8,7 @@
 
 <h1>Soumettre une activité ou un projet</h1>
 <h4>Remplissez le formulaire pour soumettre une activité ou un project hub.</h4>
+<p @bind="ErrorMessage" style="color: red"></p>
 <div class="submit-input-area">
     <div class="submit-header">
         <select @onchange="OnTypeChange" class="submit-input-style submit-project" id="submit-types">
@@ -24,6 +25,9 @@
         <div class="submit-time-selector">
             <input class="submit-input-style" min="2019-01-01" max="2020-06-30" @bind="StartDate" id="start-date" type="date" placeholder="Date" />
             <input class="submit-input-style" @bind="StartTime" id="start-time" type="time" placeholder="Time" />
+            <p> à </p>
+            <input class="submit-input-style" min="2019-01-01" max="2020-06-30" @bind="EndTime" id="start-date" type="date" placeholder="Date" />
+            <input class="submit-input-style" @bind="EndTime" id="start-time" type="time" placeholder="Time" />
         </div>
     }
     else
@@ -38,15 +42,18 @@
     private string ProjectType { get; set; }
     private DateTime StartDate { get; set; } = DateTime.Now;
     private DateTime StartTime { get; set; } = DateTime.Now;
+    private DateTime EndDate { get; set; } = DateTime.Now;
+    private DateTime EndTime { get; set; } = DateTime.Now;
     private string Description { get; set; }
     private string Title { get; set; }
     private string ImageURL { get; set; }
-
+    private string ErrorMessage { get; set; }
     private bool ProjectToggled { get; set; } = false;
 
     public void OnTypeChange(ChangeEventArgs e)
     {
         ProjectToggled = e.Value.ToString() == "Projet";
+        ProjectType = e.Value.ToString();
         base.StateHasChanged();
     }
 
@@ -56,6 +63,11 @@
         {
             HubBy.Database.Models.Project project = new Database.Models.Project();
 
+            if (String.IsNullOrWhiteSpace(Title) || String.IsNullOrWhiteSpace(ImageURL) || String.IsNullOrWhiteSpace(Description))
+            {
+                ErrorMessage = "There is one or more empty fields.";
+                return;
+            }
             project.Name = Title;
             project.ImageURL = ImageURL;
             project.Description = Description;
@@ -68,10 +80,27 @@
             Services.ApiModels.Activity activity = _ActivityService.Get()[0];
             Random rand = new Random();
 
+            if (String.IsNullOrWhiteSpace(Title) || String.IsNullOrWhiteSpace(Description))
+            {
+                ErrorMessage = "There is one or more empty fields.";
+                return;
+            }
+
+            activity.Id = null;
+
+            activity.Start = StartDate.Subtract(new TimeSpan(StartDate.Hour, StartDate.Minute, StartDate.Second));
+            activity.Start = activity.Start.Value.Add(new TimeSpan(StartTime.Hour, StartTime.Minute, 0));
+
+            activity.End = EndDate.Subtract(new TimeSpan(EndDate.Hour, EndDate.Minute, EndDate.Second));
+            activity.End = activity.End.Value.Add(new TimeSpan(EndTime.Hour, EndTime.Minute, 0));
+
+            if (activity.Start >= activity.End)
+            {
+                ErrorMessage = "End date can't be before Start date.";
+                return;
+            }
             activity.Titlemodule = "B0 - Hub";
             activity.ActiTitle = Title;
-            activity.Start = StartDate.Add(new TimeSpan(StartTime.Ticks));
-            activity.End = StartDate.Add(new TimeSpan(StartTime.Ticks));
             activity.Codeacti = "acti-" + rand.Next(11111111, 99999999);
             activity.Scolaryear = StartDate.Year;
             _ActivityService.Create(activity);
