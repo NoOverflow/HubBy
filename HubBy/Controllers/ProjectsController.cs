@@ -33,10 +33,31 @@ namespace HubBy.Controllers
             return (Json(new ControllerResponse("Ok")));
         }
 
+        /// <summary>
+        /// This endpoint is only made to delete internal projects
+        /// </summary>
+        /// <returns></returns>
         [HttpDelete]
-        public IActionResult DeleteForm(IEnumerable<string> value)
+        public IActionResult Delete([FromBody] dynamic options)
         {
-            return (Json(new ControllerResponse("Ok")));
+            try
+            {
+                if (String.IsNullOrEmpty(options.ProjectName.Value))
+                    return (Json(new ControllerResponse("No ProjectName provided")));
+                if (_projectService.Remove(options.ProjectName.Value))
+                {
+                    return (Json(new ControllerResponse("Ok")));
+                }
+                else
+                {
+                    return (Json(new ControllerResponse("Couldn't delete entry, no matching ProjectName ?")));
+                }
+
+            }
+            catch (Exception)
+            {
+                return (Json(new ControllerResponse("A backend error occured, please contact the administrators.")));
+            }
         }
     }
 }

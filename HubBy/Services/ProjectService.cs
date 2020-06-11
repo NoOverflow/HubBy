@@ -47,7 +47,13 @@ namespace HubBy.Services
         public void Remove(Project projectIn) =>
             _projects.DeleteOne(project => project.Id == projectIn.Id);
 
-        public void Remove(string id) =>
-            _projects.DeleteOne(project => project.Id == id);
+        public bool Remove(string ProjectName)
+        {
+            if (_projects.Find(x => ProjectName == x.Name).CountDocuments() == 0)
+                return (false);
+            _projects.DeleteOne(project => project.Name == ProjectName);
+            return (true);
+        }
+            
     }
 }
