@@ -12,10 +12,13 @@ using a simple REST API (So anyone can make a webapp / mobile app / embedded dis
 
 ## How does it work ?
 HubBy is powered by Blazor ASP.net core and all data is stored in a Mongo NoSQL database
+The webapp and database are hosted on Azure thanks to Azure CosmosDB
 
 ## Testing
+I included in the tests/ repository a postman configuration to automatically test the REST API.
 
 ## Deploying
+Deploying is automatic thanks to Github Actions and Azure Pipelines when a push is made on the master branch.
 
 ## API Usage
 Please refer to the wiki to learn more about it.
