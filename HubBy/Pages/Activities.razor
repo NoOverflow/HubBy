@@ -33,7 +33,7 @@
                         <div class="activity-pastille" style="background-color:@ActivityColors.GetValueOrDefault(activity.TypeTitle, "#9D70FF")">@activity.TypeTitle[0]</div>
                         <h3>@activity.ActiTitle</h3>
                         <div class="activity-smolpastille @ActivityClasses.GetValueOrDefault(activity.TypeTitle, "activity-talk")">@activity.TypeTitle.ToUpper()</div>
-                        <p class="activity-description">Débute à : @(activity.Start.Value.DateTime.ToString("dd/MM - HH:mm"))</p>
+                        <p class="activity-description">Débute à : @(activity.Start.Value.DateTime.ToString("dd/MM - HH:mm")) - Fini à : @(activity.End.Value.DateTime.ToString("dd/MM - HH:mm"))</p>
                     </li>
                 }
                 catch (Exception)

@@ -47,7 +47,10 @@
     private string Description { get; set; }
     private string Title { get; set; }
     private string ImageURL { get; set; }
-    private string ErrorMessage { get; set; }
+
+    [Parameter]
+    public string ErrorMessage { get; set; }
+
     private bool ProjectToggled { get; set; } = false;
 
     public void OnTypeChange(ChangeEventArgs e)
@@ -66,6 +69,7 @@
             if (String.IsNullOrWhiteSpace(Title) || String.IsNullOrWhiteSpace(ImageURL) || String.IsNullOrWhiteSpace(Description))
             {
                 ErrorMessage = "There is one or more empty fields.";
+                base.StateHasChanged();
                 return;
             }
             project.Name = Title;
@@ -83,6 +87,7 @@
             if (String.IsNullOrWhiteSpace(Title) || String.IsNullOrWhiteSpace(Description))
             {
                 ErrorMessage = "There is one or more empty fields.";
+                this.StateHasChanged();
                 return;
             }
 
@@ -97,6 +102,7 @@
             if (activity.Start >= activity.End)
             {
                 ErrorMessage = "End date can't be before Start date.";
+                base.StateHasChanged();
                 return;
             }
             activity.Titlemodule = "B0 - Hub";
