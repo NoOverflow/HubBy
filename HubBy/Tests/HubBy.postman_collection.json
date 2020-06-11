@@ -1,0 +1,280 @@
+{
+	"info": {
+		"_postman_id": "dc986135-b715-4210-b479-102d73c3a8f2",
+		"name": "HubBy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Activity",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"scolaryear\": 2019,\r\n        \"codemodule\": \"B-INN-000\",\r\n        \"codeinstance\": \"TLS-0-1\",\r\n        \"codeacti\": \"acti-42424242\",\r\n        \"codeevent\": \"event-393527\",\r\n        \"semester\": 0,\r\n        \"instance_location\": \"FR/TLS\",\r\n        \"titlemodule\": \"B0 - Hub\",\r\n        \"prof_inst\": [\r\n            {\r\n                \"type\": \"group\",\r\n                \"login\": \"hub-toulouse\"\r\n            },\r\n            {\r\n                \"type\": \"group\",\r\n                \"login\": \"dev-toulouse\"\r\n            }\r\n        ],\r\n        \"acti_title\": \"[HUB][EXP] Test Activity\",\r\n        \"num_event\": 1,\r\n        \"start\": \"2020-05-28T14:00:00+02:00\",\r\n        \"end\": \"2020-05-28T17:00:00+02:00\",\r\n        \"total_students_registered\": 16,\r\n        \"title\": null,\r\n        \"type_title\": \"Experimentation\",\r\n        \"is_rdv\": 0,\r\n        \"nb_hours\": \"2020-06-09T03:00:00+02:00\",\r\n        \"allowed_planning_start\": \"2020-05-28T14:00:00+02:00\",\r\n        \"allowed_planning_end\": \"2020-05-28T17:00:00+02:00\",\r\n        \"nb_group\": 1,\r\n        \"nb_max_students_projet\": null,\r\n        \"room\": {\r\n            \"type\": null,\r\n            \"seats\": 35\r\n        },\r\n        \"dates\": null,\r\n        \"module_available\": true,\r\n        \"module_registered\": true,\r\n        \"past\": true,\r\n        \"allow_register\": false,\r\n        \"event_registered\": {\r\n            \"bool\": false,\r\n            \"string\": null\r\n        },\r\n        \"display\": 0,\r\n        \"project\": false,\r\n        \"rdv_group_registered\": null,\r\n        \"rdv_indiv_registered\": null,\r\n        \"allow_token\": false,\r\n        \"register_student\": true,\r\n        \"register_prof\": false,\r\n        \"register_month\": false,\r\n        \"in_more_than_one_month\": false\r\n    }"
+				},
+				"url": {
+					"raw": "https://localhost:44348/api/activities",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44348",
+					"path": [
+						"api",
+						"activities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Project",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"Name\":\"TestProject\",\"State\":\"Done\",\"CreatedOn\":\"2014-04-23T18:25:43.511Z\",\"Description\":\"Backend test project\",\"Members\":[12,32],\"ImageURL\":\"https://i.ibb.co/jVYXYp3/Ellipse.png\"}"
+				},
+				"url": {
+					"raw": "https://localhost:44348/api/projects",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44348",
+					"path": [
+						"api",
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Activities",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8a321bc9-2cea-4270-8b70-c7ca71551474",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"[HUB][EXP] Test Activity\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 3000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44348/api/activities",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44348",
+					"path": [
+						"api",
+						"activities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Projects",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "db1e55ca-07ca-4c0d-ba48-b7a1d780d624",
+						"exec": [
+							"pm.test(\"Response time is less than 3000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body contains test project\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"TestProject\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44348/api/projects",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44348",
+					"path": [
+						"api",
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Activity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b6c618ca-2e4e-4ecb-afa9-f1ae5b44d232",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"Codeacti\":\"acti-42424242\"}"
+				},
+				"url": {
+					"raw": "https://localhost:44348/api/activities",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44348",
+					"path": [
+						"api",
+						"activities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "87852c2b-fa4f-4789-add5-36f61cb0dc5d",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "test_dddqzd",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "test",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"ProjectName\":\"TestProject\"}"
+				},
+				"url": {
+					"raw": "https://localhost:44348/api/projects",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44348",
+					"path": [
+						"api",
+						"projects"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
