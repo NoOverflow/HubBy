@@ -38,5 +38,6 @@ namespace HubBy.Database.Models
 
         [BsonElement("ImageURL")]
         public string ImageURL { get; set; }
+
     }
 }

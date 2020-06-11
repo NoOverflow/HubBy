@@ -1,0 +1,81 @@
+﻿@page "/submit"
+
+@using HubBy.Database.Models;
+
+@inject HubBy.Services.ActivityService _ActivityService
+@inject HubBy.Services.ProjectService _ProjectService
+@inject NavigationManager _NavigationManager
+
+<h1>Soumettre une activité ou un projet</h1>
+<h4>Remplissez le formulaire pour soumettre une activité ou un project hub.</h4>
+<div class="submit-input-area">
+    <div class="submit-header">
+        <select @onchange="OnTypeChange" class="submit-input-style submit-project" id="submit-types">
+            <option value="Talk">Talk</option>
+            <option value="Workshop">Workshop</option>
+            <option value="Experimentation">Experimentation</option>
+            <option value="Projet">Projet</option>
+        </select>
+        <input @bind="Title" class="submit-title submit-input-style" type="text" placeholder="Titre" />
+    </div>
+    <textarea @bind="Description" class="submit-input-style" placeholder="Description"></textarea>
+    @if (!ProjectToggled)
+    {
+        <div class="submit-time-selector">
+            <input class="submit-input-style" min="2019-01-01" max="2020-06-30" @bind="StartDate" id="start-date" type="date" placeholder="Date" />
+            <input class="submit-input-style" @bind="StartTime" id="start-time" type="time" placeholder="Time" />
+        </div>
+    }
+    else
+    {
+        <input class="submit-input-style" @bind="ImageURL" type="text" placeholder="Image URL" />
+    }
+    <button class="submit-input-style submit-button" @onclick="SubmitEntry">SOUMETTRE</button>
+</div>
+
+@code {
+
+    private string ProjectType { get; set; }
+    private DateTime StartDate { get; set; } = DateTime.Now;
+    private DateTime StartTime { get; set; } = DateTime.Now;
+    private string Description { get; set; }
+    private string Title { get; set; }
+    private string ImageURL { get; set; }
+
+    private bool ProjectToggled { get; set; } = false;
+
+    public void OnTypeChange(ChangeEventArgs e)
+    {
+        ProjectToggled = e.Value.ToString() == "Projet";
+        base.StateHasChanged();
+    }
+
+    public void SubmitEntry()
+    {
+        if (ProjectType == "Projet")
+        {
+            HubBy.Database.Models.Project project = new Database.Models.Project();
+
+            project.Name = Title;
+            project.ImageURL = ImageURL;
+            project.Description = Description;
+            project.CreatedOn = StartDate.Add(new TimeSpan(StartTime.Ticks));
+            _ProjectService.Create(project);
+            _NavigationManager.NavigateTo(_NavigationManager.BaseUri + "/projects");
+        }
+        else
+        {
+            Services.ApiModels.Activity activity = _ActivityService.Get()[0];
+            Random rand = new Random();
+
+            activity.Titlemodule = "B0 - Hub";
+            activity.ActiTitle = Title;
+            activity.Start = StartDate.Add(new TimeSpan(StartTime.Ticks));
+            activity.End = StartDate.Add(new TimeSpan(StartTime.Ticks));
+            activity.Codeacti = "acti-" + rand.Next(11111111, 99999999);
+            activity.Scolaryear = StartDate.Year;
+            _ActivityService.Create(activity);
+            _NavigationManager.NavigateTo(_NavigationManager.BaseUri + "/activities");
+        }
+    }
+}

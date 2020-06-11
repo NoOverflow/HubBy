@@ -16,6 +16,7 @@
         <input @bind="SearchBoxValue" class="search-bar" type="text" placeholder="Rechercher des projets..." />
         <button @onclick="OnSearchClick" class="search-button">RECHERCHER</button>
     </div>
+    
     <div class="search-settings"></div>
     @if (projects == null)
     {
@@ -24,6 +25,7 @@
     else
     {
         <ul class="project-list">
+            <a class="project-submit" href="/submit">SOUMETTRE UN PROJET</a>
             @foreach (var project in projects)
             {
                 <li class="project-card">
